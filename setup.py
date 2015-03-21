@@ -1,5 +1,6 @@
 import setuptools
-from imagefapper import __version__
+from imagefapper._version import __version__
+
 
 try:
     with open("README.rst") as f:
@@ -21,5 +22,10 @@ setuptools.setup(
     author="Jack Maney",
     author_email="jackmaney@gmail.com",
     packages=setuptools.find_packages(),
-    long_description=long_description
+    long_description=long_description,
+    entry_points={
+        "console_scripts": [
+            "imagefapper=imagefapper.imagefapper:main"
+        ]
+    }
 )
