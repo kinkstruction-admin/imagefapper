@@ -4,6 +4,8 @@ import queue
 import requests
 import threading
 
+from .watcher import Watcher
+
 
 class Grabber(object):
 
@@ -32,15 +34,23 @@ class Grabber(object):
 
         self.lock = threading.Lock()
 
+        self.threads = [threading.Thread(target=self.worker) for i in range(self.num_threads)]
+
+        self.url_list = url_list
+
     def grab(self):
 
-        threads = [threading.Thread(target=self.worker) for i in range(self.num_threads)]
+        watcher = Watcher(self, len(self.url_list))
 
-        for t in threads:
+        for t in self.threads:
             t.daemon = True
             t.start()
 
+        watcher.daemon = True
+        watcher.start()
+
         self.queue.join()
+        watcher.join()
 
     def worker(self):
 
@@ -50,7 +60,7 @@ class Grabber(object):
                 url, file_name = self.queue.get()
 
                 if url is None or file_name is None:
-                    # print("{} done!".format(threading.current_thread().name))
+                    self.is_done = True
                     return
 
                 response = requests.get(url, stream=True)
