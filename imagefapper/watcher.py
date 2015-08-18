@@ -4,6 +4,9 @@ import time
 
 
 class Unbuffered(object):
+    """
+    A wrapper class for getting unbuffered output.
+    """
 
     def __init__(self, stream):
         self.stream = stream
@@ -17,6 +20,9 @@ class Unbuffered(object):
 
 
 class Watcher(threading.Thread):
+    """
+    A thread specifically for reporting progress and updating the progress bar.
+    """
 
     def __init__(self, grabber, num_urls, sleep_sec=0.5):
 

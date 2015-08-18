@@ -20,7 +20,8 @@ class Grabber(object):
         prefixes = [prefix_format.format(i) for i in range(len(url_list))]
 
         file_names = [
-            os.path.join(directory, "{}-{}".format(prefixes[i], url.split("/")[-1]))
+            #os.path.join(directory, "{}-{}".format(prefixes[i], url.split("/")[-1]))
+            os.path.join(directory, url.split("/")[-1])
             for i, url in enumerate(url_list)
         ]
 
@@ -37,6 +38,8 @@ class Grabber(object):
         self.threads = [threading.Thread(target=self.worker) for i in range(self.num_threads)]
 
         self.url_list = url_list
+
+        self.is_done = False
 
     def grab(self):
 
