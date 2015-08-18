@@ -1,22 +1,10 @@
-"""
-Usage:  imagefapper  [--dir=<directory>] [--num_threads=<num_threads>] <gallery_url>
-        imagefapper --version
-        imagefapper --help
-
-
-        --dir, -d           The directory (under .) to which the images will be loaded.
-                                This directory will be created if it doesn't exist. If not
-                                specified, the directory is based off of the gallery name.
-        --num_threads, -n   The number of threads to use [default: 10].
-
-"""
 import click
 import os
 import re
 import requests
 import six
 
-from six.moves import urllib_parse
+import six.moves
 from ._version import __version__
 
 from .scraper import AttributeScraper
@@ -53,7 +41,7 @@ class Gallery(object):
 
         assert re.match("^\d+$", self.id), "Unexpected gallery id: {}".format(self.id)
 
-        parsed = urllib_parse.urlparse(url)
+        parsed = six.moves.urllib_parse.urlparse(url)
 
         self.base_url = url
         self.full_page_url = url
@@ -62,7 +50,7 @@ class Gallery(object):
         self.image_links = []
 
         if parsed.query:
-            query_parts = dict(urllib_parse.parse_qsl(parsed.query))
+            query_parts = dict(six.moves.urllib_parse.parse_qsl(parsed.query))
             self.base_url = re.sub(
                 "\?$", "", parsed.geturl().replace(parsed.query, ""))
 
